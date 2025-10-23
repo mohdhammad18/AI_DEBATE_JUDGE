@@ -35,6 +35,7 @@ app.use((err, req, res, next) => {
 
 async function start() {
   try {
+    console.log('Starting server...',process.env.MONGODB_URI);
     const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/ai-debate-judge';
     await mongoose.connect(mongoUri);
     console.log('Connected to MongoDB');
