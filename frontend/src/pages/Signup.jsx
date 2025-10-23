@@ -28,8 +28,9 @@ export default function Register() {
     const loadingToast = toast.loading("Creating account...");
     try {
       const res = await auth.register(formData);
+      console.log(res);
       toast.dismiss(loadingToast);
-      if (res.success) {
+      if (res.token && res.user) {
         toast.success("Registration successful!");
         navigate("/login");
       } else {
@@ -76,7 +77,7 @@ export default function Register() {
               name="username"
               type="text"
               required
-              placeholder="johndoe"
+              placeholder="Mohd Hammad Ansari"
               value={formData.username}
               onChange={handleChange}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-400 text-sm transition"
@@ -96,7 +97,7 @@ export default function Register() {
               name="email"
               type="email"
               required
-              placeholder="you@example.com"
+              placeholder="hammadansari@gmail.com"
               value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-400 text-sm transition"
