@@ -27,6 +27,9 @@ router.post('/judge', auth, async (req, res) => {
     if (!sideA || !sideB) {
       return res.status(400).json({ message: 'Both side A and side B arguments are required' });
     }
+    console.log("Received debate for topic:",topic);
+    console.log("Side A arguments:",sideA);
+    console.log("Side B arguments:",sideB); 
 
     let sideAResponse, sideBResponse;
     try {

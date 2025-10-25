@@ -114,25 +114,25 @@ export default function NewDebate() {
           {step === 1 && (
             <motion.div key="setup" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
               className="bg-white shadow-md rounded-2xl border border-gray-100 p-6 space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900">Step 1: Setup</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Debate Configuration</h2>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Debate Topic</label>
+                <label className="block text-sm font-medium text-gray-700">Enter the 'Debate Topic'</label>
                 <input
                   type="text"
                   name="topic"
                   value={formData.topic}
                   onChange={handleChange}
-                  placeholder="e.g., Should AI replace human judges?"
+                  placeholder="Should AI replace human judges?"
                   className="mt-2 w-full rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 p-3 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Number of Arguments (1–5)</label>
+                <label className="block text-sm font-medium text-gray-700">Number of Arguments (1–15)</label>
                 <input
                   type="number"
                   name="numPoints"
                   min="1"
-                  max="5"
+                  max="15"
                   value={formData.numPoints}
                   onChange={handleChange}
                   className="mt-2 w-32 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 p-2 text-sm"
@@ -160,7 +160,7 @@ export default function NewDebate() {
                 <div className="h-full bg-indigo-600 transition-all duration-500" style={{ width: `${progress}%` }} />
               </div>
 
-              <p className="text-gray-700 font-medium">Now: {turn === "A" ? "🟣 Side A" : "🔵 Side B"}</p>
+              <p className="text-gray-700 font-medium">{turn === "A" ? "🟣 Side A (FOR)" : "🔵 Side B (AGAINST)"}</p>
 
               <textarea
                 value={inputValue}
@@ -238,7 +238,7 @@ export default function NewDebate() {
               <div className="grid sm:grid-cols-2 gap-6">
                 {/* 🟣 Side A */}
                 <div className="bg-indigo-50 rounded-xl p-5">
-                  <h3 className="text-lg font-semibold text-indigo-700 mb-3">🟣 Side A</h3>
+                  <h3 className="text-lg font-semibold text-indigo-700 mb-3">🟣 Side A (FOR)</h3>
                   <p className="text-sm text-gray-800 mb-2">
                     <strong>Argument:</strong> {result.debate.sideA || formData.sideA.join(" ")}
                   </p>
@@ -257,7 +257,7 @@ export default function NewDebate() {
 
                 {/* 🔵 Side B */}
                 <div className="bg-red-50 rounded-xl p-5">
-                  <h3 className="text-lg font-semibold text-red-700 mb-3">🔵 Side B</h3>
+                  <h3 className="text-lg font-semibold text-red-700 mb-3">🔵 Side B (AGAINST)</h3>
                   <p className="text-sm text-gray-800 mb-2">
                     <strong>Argument:</strong> {result.debate.sideB || formData.sideB.join(" ")}
                   </p>
