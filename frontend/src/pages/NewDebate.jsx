@@ -114,25 +114,25 @@ export default function NewDebate() {
           {step === 1 && (
             <motion.div key="setup" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
               className="bg-white shadow-md rounded-2xl border border-gray-100 p-6 space-y-6">
-              <h2 className="text-xl font-semibold text-gray-900">Step 1: Setup</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Debate Configuration</h2>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Debate Topic</label>
+                <label className="block text-sm font-medium text-gray-700">Enter the 'Debate Topic'</label>
                 <input
                   type="text"
                   name="topic"
                   value={formData.topic}
                   onChange={handleChange}
-                  placeholder="e.g., Should AI replace human judges?"
+                  placeholder="Should AI replace human judges?"
                   className="mt-2 w-full rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 p-3 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Number of Arguments (1–5)</label>
+                <label className="block text-sm font-medium text-gray-700">Number of Arguments (1–15)</label>
                 <input
                   type="number"
                   name="numPoints"
                   min="1"
-                  max="5"
+                  max="15"
                   value={formData.numPoints}
                   onChange={handleChange}
                   className="mt-2 w-32 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 p-2 text-sm"
