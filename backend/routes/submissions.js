@@ -1,4 +1,5 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
 
 // In-memory submissions for demo
@@ -25,4 +26,4 @@ router.get('/:id', (req, res) => {
   res.json({ ok: true, submission: s });
 });
 
-module.exports = router;
+export default router;

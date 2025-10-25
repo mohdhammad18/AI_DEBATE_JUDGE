@@ -160,7 +160,7 @@ export default function NewDebate() {
                 <div className="h-full bg-indigo-600 transition-all duration-500" style={{ width: `${progress}%` }} />
               </div>
 
-              <p className="text-gray-700 font-medium">Now: {turn === "A" ? "🟣 Side A" : "🔵 Side B"}</p>
+              <p className="text-gray-700 font-medium">Now: {turn === "A" ? "🟣 Side A (For)" : "🔵 Side B (Against)"}</p>
 
               <textarea
                 value={inputValue}
@@ -192,7 +192,7 @@ export default function NewDebate() {
               <div className="grid sm:grid-cols-2 gap-6">
                 {["A", "B"].map((side) => (
                   <div key={side}>
-                    <h3 className={`text-lg font-medium ${side === "A" ? "text-indigo-700" : "text-red-700"}`}>Side {side}</h3>
+                    <h3 className={`text-lg font-medium ${side === "A" ? "text-indigo-700" : "text-red-700"}`}>Side {side==="A"?"A (For)":"B (Against)"}</h3>
                     {formData[`side${side}`].map((arg, i) => (
                       <div key={i} className="mt-3">
                         {editMode ? (
@@ -238,7 +238,7 @@ export default function NewDebate() {
               <div className="grid sm:grid-cols-2 gap-6">
                 {/* 🟣 Side A */}
                 <div className="bg-indigo-50 rounded-xl p-5">
-                  <h3 className="text-lg font-semibold text-indigo-700 mb-3">🟣 Side A</h3>
+                  <h3 className="text-lg font-semibold text-indigo-700 mb-3">🟣 Side A (For)</h3>
                   <p className="text-sm text-gray-800 mb-2">
                     <strong>Argument:</strong> {result.debate.sideA || formData.sideA.join(" ")}
                   </p>
@@ -257,7 +257,7 @@ export default function NewDebate() {
 
                 {/* 🔵 Side B */}
                 <div className="bg-red-50 rounded-xl p-5">
-                  <h3 className="text-lg font-semibold text-red-700 mb-3">🔵 Side B</h3>
+                  <h3 className="text-lg font-semibold text-red-700 mb-3">🔵 Side B (Against)</h3>
                   <p className="text-sm text-gray-800 mb-2">
                     <strong>Argument:</strong> {result.debate.sideB || formData.sideB.join(" ")}
                   </p>

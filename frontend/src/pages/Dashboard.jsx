@@ -143,7 +143,7 @@ export default function Dashboard() {
             <div>
               <p className="text-gray-500 text-sm">Winning Side</p>
               <h3 className="text-2xl font-bold text-gray-900">
-                {sideAWins > sideBWins ? "Side A 🟣" : sideBWins > 0 ? "Side B 🔵" : "—"}
+                {sideAWins > sideBWins ? "Side A (For) 🟣" : sideBWins > 0 ? "Side B (Against) 🔵" : "—"}
               </h3>
             </div>
           </div>
