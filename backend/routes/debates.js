@@ -1,9 +1,10 @@
-const express = require('express');
+import express from 'express';
+import auth from '../middleware/auth.js';
+import Debate from '../models/Debate.js';
+import User from '../models/User.js';
+import axios from 'axios';
+
 const router = express.Router();
-const auth = require('../middleware/auth');
-const Debate = require('../models/Debate');
-const User = require('../models/User');
-const axios = require('axios');
 
 // Helper function to parse model response
 
@@ -33,7 +34,10 @@ router.post('/judge', auth, async (req, res) => {
 
     let sideAResponse, sideBResponse;
     try {
-      sideAResponse = await axios.post(process.env.MODEL_URL, { arguments: sideA, topic:topic });
+      console.log("Sending Side A arguments to model:",sideA);
+      console.log("Topic:",topic);
+      console.log(process.env.MODEL_URL)
+      sideAResponse = await axios.post(process.env.MODEL_URL, { arguments: sideA, topic:topic});
       console.log("Side A model raw response:",sideAResponse.data);
       
     } catch (err) {
@@ -164,4 +168,4 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

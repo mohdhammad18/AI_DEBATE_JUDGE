@@ -57,7 +57,7 @@ export default function Register() {
         className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8 border border-gray-100"
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Create Account ✨</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Create Account </h1>
           <p className="text-gray-500 mt-2">
             Join <span className="font-semibold text-indigo-600">AI Debate Judge</span>
           </p>

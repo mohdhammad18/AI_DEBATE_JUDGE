@@ -76,8 +76,8 @@ export default function DebateDetails() {
           animate={{ y: 0, opacity: 1 }}
           className="bg-white/70 backdrop-blur-md shadow-md border border-gray-100 rounded-2xl p-8 flex items-center "
         >
-          <h2 className="text-2xl font-semibold text-gray-900 flex items-center gap-2 mb-3">
-            <MessageSquare className="text-indigo-600 w-6 h-6" /> Topic : <span className="text-gray-600">{debate.topic}</span>
+          <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-3">
+            <MessageSquare className="text-indigo-600 w-4 h-4" /> <span>Topic :</span> <span className="text-gray-600">{debate.topic}</span>
           </h2>
         </motion.div>
 

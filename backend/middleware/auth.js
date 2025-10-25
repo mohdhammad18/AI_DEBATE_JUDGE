@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 
-module.exports = function(req, res, next) {
+export default function (req, res, next) {
   // Get token from header
   const token = req.header('Authorization')?.replace('Bearer ', '');
 

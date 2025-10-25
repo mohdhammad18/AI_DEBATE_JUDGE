@@ -1,10 +1,10 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const User = require('../models/User')
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import User from '../models/User.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me'
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body
     if (!username || !email || !password) {
@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
     const user = new User({ username, email, passwordHash })
     await user.save()
 
-    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1d' })
     res.status(201).json({
       user: { id: user._id, username: user.username, email: user.email },
       token
@@ -35,7 +35,7 @@ exports.register = async (req, res) => {
   }
 }
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body
     if (!email || !password) {
@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
       })
     }
 
-    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1d' })
     res.json({
       user: { id: user._id, username: user.username, email: user.email },
       token
@@ -70,7 +70,7 @@ exports.login = async (req, res) => {
 }
 
 // Get current user information
-exports.getCurrentUser = async (req, res) => {
+export const getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-passwordHash')
     if (!user) {

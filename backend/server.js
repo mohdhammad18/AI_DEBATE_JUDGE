@@ -1,12 +1,15 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
+import dotenv from 'dotenv';
+dotenv.config();
+import https from 'https';
+import axios from 'axios';
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
 
-const authRoutes = require('./routes/auth');
-const debateRoutes = require('./routes/debates');
-const problemsRoutes = require('./routes/problems');
-const submissionsRoutes = require('./routes/submissions');
+import authRoutes from './routes/auth.js';
+import debateRoutes from './routes/debates.js';
+import problemsRoutes from './routes/problems.js';
+import submissionsRoutes from './routes/submissions.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;

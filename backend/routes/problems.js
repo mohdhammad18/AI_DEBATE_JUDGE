@@ -1,4 +1,5 @@
-const express = require('express');
+import express from 'express';
+
 const router = express.Router();
 
 // Simple in-memory store for demo
@@ -24,4 +25,4 @@ router.post('/', (req, res) => {
   res.status(201).json({ ok: true, problem: newP });
 });
 
-module.exports = router;
+export default router;
