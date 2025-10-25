@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { ArrowRight, PlusCircle, Trophy, BarChart3, History, Trash2, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 
+
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -13,6 +15,27 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const [deleteModal, setDeleteModal] = useState({ show: false, debateId: null });
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const placeholderSummaries = [
+  "A thought-provoking discussion on this topic.",
+  "Explore the different sides of this complex issue.",
+  "See how the arguments unfolded in this debate.",
+  "A deep dive into the pros and cons.",
+  "A spirited exchange of ideas.",
+];
+
+
+const getStablePlaceholderIndex = (id) => {
+  let hash = 0;
+  const str = String(id);
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0; // Convert to 32bit integer
+  }
+  // Make it positive and get a value between 0 and 4
+  return Math.abs(hash) % placeholderSummaries.length;
+};
 
   const handleDelete = (e, debateId) => {
     e.stopPropagation();
@@ -85,7 +108,7 @@ export default function Dashboard() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-              Welcome, {user?.username} 
+              Welcome, {user?.username || "Debater"}!
             </h1>
             <p className="mt-1 text-gray-500">
               Track your debates, see results, and start new challenges.
@@ -226,7 +249,7 @@ export default function Dashboard() {
                   </p>
 
                   <p className="text-gray-700 text-sm line-clamp-3 mb-4">
-                    {debate.summary || "A thought-provoking discussion on this topic."}
+                    {debate.summary || placeholderSummaries[getStablePlaceholderIndex(debate._id)]}
                   </p>
 
                   <div className="flex items-center justify-between text-sm text-indigo-600 font-medium">

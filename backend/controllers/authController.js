@@ -24,7 +24,7 @@ export const register = async (req, res) => {
     const user = new User({ username, email, passwordHash })
     await user.save()
 
-    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1d' })
     res.status(201).json({
       user: { id: user._id, username: user.username, email: user.email },
       token
@@ -58,7 +58,7 @@ export const login = async (req, res) => {
       })
     }
 
-    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1d' })
     res.json({
       user: { id: user._id, username: user.username, email: user.email },
       token
