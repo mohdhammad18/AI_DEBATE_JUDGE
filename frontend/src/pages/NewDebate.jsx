@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { debates } from "../api/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
-import { Brain, ArrowLeft, Loader2, Plus, Pencil, Check, Edit3 } from "lucide-react";
+import { Brain, ArrowLeft, Loader2, Plus, Pencil, Check, Edit3, Clock } from "lucide-react";
+import Timer from '../components/Timer';
 
 export default function NewDebate() {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ export default function NewDebate() {
     numPoints: 1,
     sideA: [],
     sideB: [],
+    timeEnabled: false,
+    timePerSide: 300, // 5 minutes in seconds
   });
   const [turn, setTurn] = useState("A");
   const [inputValue, setInputValue] = useState("");
@@ -21,6 +24,19 @@ export default function NewDebate() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState({ A: 0, B: 0 });
+  const [initialTimeSet, setInitialTimeSet] = useState(false);
+
+  // Initialize timers when entering step 2
+  useEffect(() => {
+    if (step === 2 && formData.timeEnabled && !initialTimeSet) {
+      setTimeRemaining({
+        A: formData.timePerSide,
+        B: formData.timePerSide
+      });
+      setInitialTimeSet(true);
+    }
+  }, [step, formData.timeEnabled, formData.timePerSide, initialTimeSet]);
 
   // Derived progress
   const totalRounds = formData.numPoints * 2;
@@ -33,27 +49,37 @@ export default function NewDebate() {
     setFormData({ ...formData, [name]: name === "numPoints" ? parseInt(value) : value });
   };
 
-  const handleAddArgument = () => {
-    if (!inputValue.trim()) {
+  const handleAddArgument = (isTimeUp = false) => {
+    if (!isTimeUp && !inputValue.trim()) {
       toast.error("Please enter a valid argument.");
       return;
     }
 
     const updated = { ...formData };
+    const nextTurn = turn === "A" ? "B" : "A";
+    const currentTime = timeRemaining[turn];
+    
     if (turn === "A") {
-      updated.sideA.push(inputValue.trim());
-      setTurn("B");
+      updated.sideA.push(inputValue.trim() || "Time expired before argument completion");
+      setTurn(nextTurn);
     } else {
-      updated.sideB.push(inputValue.trim());
-      setTurn("A");
+      updated.sideB.push(inputValue.trim() || "Time expired before argument completion");
+      setTurn(nextTurn);
       setCurrentIndex((i) => i + 1);
     }
+    
     setFormData(updated);
     setInputValue("");
 
     if (updated.sideA.length === formData.numPoints && updated.sideB.length === formData.numPoints) {
       toast.success("All arguments added! Review before submission.");
       setStep(3);
+    } else if (isTimeUp) {
+      if (currentTime <= 0) {
+        toast.error(`Time's up for Side ${turn}! No time remaining.`);
+      } else {
+        toast.warning("Time's up for this argument! Moving to next turn.");
+      }
     }
   };
 
@@ -73,6 +99,8 @@ export default function NewDebate() {
         topic: formData.topic,
         sideA: formData.sideA.join(' '), // Combine all arguments for side A
         sideB: formData.sideB.join(' '), // Combine all arguments for side B
+        timeEnabled: formData.timeEnabled,
+        timePerSide: formData.timePerSide
       };
       const data = await debates.submitDebate(payload);
       toast.dismiss(toastId);
@@ -89,11 +117,20 @@ export default function NewDebate() {
 
   const resetDebate = () => {
     setStep(1);
-    setFormData({ topic: "", numPoints: 3, sideA: [], sideB: [] });
+    setFormData({ 
+      topic: "", 
+      numPoints: 3, 
+      sideA: [], 
+      sideB: [], 
+      timeEnabled: false,
+      timePerSide: 300
+    });
     setTurn("A");
     setResult(null);
     setCurrentIndex(0);
     setEditMode(false);
+    setTimeRemaining({ A: 0, B: 0 });
+    setInitialTimeSet(false);
   };
 
   return (
@@ -138,6 +175,35 @@ export default function NewDebate() {
                   className="mt-2 w-32 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 p-2 text-sm"
                 />
               </div>
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="timeEnabled"
+                    name="timeEnabled"
+                    checked={formData.timeEnabled}
+                    onChange={(e) => setFormData({ ...formData, timeEnabled: e.target.checked })}
+                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                  />
+                  <label htmlFor="timeEnabled" className="ml-2 block text-sm font-medium text-gray-700">
+                    Enable Time Limit for Arguments
+                  </label>
+                </div>
+                {formData.timeEnabled && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Time per Side (in minutes)</label>
+                    <input
+                      type="number"
+                      name="timePerSide"
+                      min="1"
+                      max="15"
+                      value={Math.floor(formData.timePerSide / 60)}
+                      onChange={(e) => setFormData({ ...formData, timePerSide: e.target.value * 60 })}
+                      className="mt-2 w-32 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 p-2 text-sm"
+                    />
+                  </div>
+                )}
+              </div>
               <div className="flex justify-end">
                 <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}
                   onClick={() => formData.topic.trim() ? setStep(2) : toast.error("Enter a topic first")}
@@ -154,13 +220,47 @@ export default function NewDebate() {
               className="bg-white shadow-md rounded-2xl border border-gray-100 p-6 space-y-6">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-gray-900">Round {Math.ceil(currentCount / 2) + 1}</h2>
-                <span className="text-sm text-gray-500">{currentCount}/{totalRounds}</span>
+                <div className="flex items-center gap-6">
+                  {formData.timeEnabled && (
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-indigo-600 font-medium">Side A:</span>
+                        <Timer
+                          remainingTime={timeRemaining.A}
+                          isActive={turn === "A"}
+                          onTimeUpdate={(time) => setTimeRemaining(prev => ({ ...prev, A: time }))}
+                          onTimeUp={() => turn === "A" && handleAddArgument(true)}
+                          className="text-sm font-medium"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-blue-600 font-medium">Side B:</span>
+                        <Timer
+                          remainingTime={timeRemaining.B}
+                          isActive={turn === "B"}
+                          onTimeUpdate={(time) => setTimeRemaining(prev => ({ ...prev, B: time }))}
+                          onTimeUp={() => turn === "B" && handleAddArgument(true)}
+                          className="text-sm font-medium"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  <span className="text-sm text-gray-500">{currentCount}/{totalRounds}</span>
+                </div>
               </div>
               <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
                 <div className="h-full bg-indigo-600 transition-all duration-500" style={{ width: `${progress}%` }} />
               </div>
 
-              <p className="text-gray-700 font-medium">Now: {turn === "A" ? "🟣 Side A (For)" : "🔵 Side B (Against)"}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-gray-700 font-medium">Now: {turn === "A" ? "🟣 Side A (For)" : "🔵 Side B (Against)"}</p>
+                {formData.timeEnabled && (
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Clock size={14} />
+                    Time remaining
+                  </div>
+                )}
+              </div>
 
               <textarea
                 value={inputValue}

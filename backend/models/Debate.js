@@ -5,6 +5,8 @@ const debateSchema = new mongoose.Schema({
   sideA: { type: String, required: true },
   sideB: { type: String, required: true },
   topic: { type: String, required: false },
+  timeEnabled: { type: Boolean, default: false },
+  timePerSide: { type: Number }, // time in seconds
   scoreA: { type: Number, required: true },
   scoreB: { type: Number, required: true },
   winner: { type: String, enum: ['Side A', 'Side B', 'Draw'], required: true },
