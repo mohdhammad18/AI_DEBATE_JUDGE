@@ -89,7 +89,7 @@ export default function DebateDetails() {
         >
           {/* Side A */}
           <div className="bg-white/60 backdrop-blur-lg border border-indigo-100 rounded-2xl shadow-sm hover:shadow-md transition p-6">
-            <h3 className="text-lg font-semibold text-indigo-800 mb-3">Side A</h3>
+            <h3 className="text-lg font-semibold text-indigo-800 mb-3">Side A (FOR)</h3>
             <p className="text-gray-700 mb-4 text-sm leading-relaxed">{debate.sideA}</p>
             <div className="space-y-3">
               <p className="text-sm font-medium text-indigo-700 flex items-center gap-2">
@@ -113,7 +113,7 @@ export default function DebateDetails() {
 
           {/* Side B */}
           <div className="bg-white/60 backdrop-blur-lg border border-blue-100 rounded-2xl shadow-sm hover:shadow-md transition p-6">
-            <h3 className="text-lg font-semibold text-blue-800 mb-3">Side B</h3>
+            <h3 className="text-lg font-semibold text-blue-800 mb-3">Side B (AGAINST)</h3>
             <p className="text-gray-700 mb-4 text-sm leading-relaxed">{debate.sideB}</p>
             <div className="space-y-3">
               <p className="text-sm font-medium text-blue-700 flex items-center gap-2">
