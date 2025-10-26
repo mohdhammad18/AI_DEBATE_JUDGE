@@ -40,7 +40,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/MD-IESA-ALI-AHMED/AI_DEBATE_JUDGE.git
+   git clone https://github.com/mohdhammad18/AI_DEBATE_JUDGE.git
    cd AI_DEBATE_JUDGE
    ```
 
